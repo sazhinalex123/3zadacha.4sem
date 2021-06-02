@@ -155,8 +155,9 @@ CRationalNumber operator*(const CRatVector &left, const CRatVector &right) {
 	int div = 0;
 	int den = 1;
 	int m = std::min(left.size(), right.size());
-#pragma omp parallel for reduction(+:den)
+#pragma omp parallel for
 	for (int i = 0; i < m; i++) {
+#pragma omp atomic
 		den *= left[i].den * right[i].den;
 	}
 #pragma omp parallel for reduction(+:div)
@@ -165,3 +166,4 @@ CRationalNumber operator*(const CRatVector &left, const CRatVector &right) {
 	}
 	return {div,den};
 }
+
